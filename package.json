@@ -8,14 +8,16 @@
     "start": "next start"
   },
   "dependencies": {
-    "uploadthing": "^5.4.0",
     "clsx": "^2.0.0",
     "next": "13.4.12",
     "react": "18.2.0",
     "react-dom": "18.2.0",
-    "tailwindcss": "^3.3.2"
+    "tailwindcss": "^3.3.2",
+    "uploadthing": "^5.4.0"
   },
   "devDependencies": {
+    "@types/node": "^24.0.1",
+    "@types/react": "^19.1.8",
     "autoprefixer": "^10.4.14",
     "postcss": "^8.4.21",
     "typescript": "^5.0.4"
