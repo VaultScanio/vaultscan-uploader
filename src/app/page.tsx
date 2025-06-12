@@ -1,10 +1,9 @@
 "use client";
 
 import { useState } from "react";
-import { generateComponents } from "@uploadthing/react";
+import { UploadDropzone } from "@uploadthing/react";
+import type { OurFileRouter } from "./api/uploadthing/core";
 import "../styles/globals.css";
-
-const { UploadDropzone } = generateComponents();
 
 export default function Home() {
   const [files, setFiles] = useState<any[]>([]);
@@ -17,7 +16,7 @@ export default function Home() {
           Drop up to 15 documents for VaultScan to analyze duplicates, PII, and more.
         </p>
 
-        <UploadDropzone
+        <UploadDropzone<OurFileRouter>
           endpoint="fileUploader"
           onClientUploadComplete={(res) => {
             setFiles(res);
@@ -26,7 +25,7 @@ export default function Home() {
           onUploadError={(error) => {
             alert(`❌ Upload failed: ${error.message}`);
           }}
-          config={{ maxFileCount: 15 }}
+          config={{ mode: "auto", maxFileCount: 15 }}
         />
 
         {files.length > 0 && (
