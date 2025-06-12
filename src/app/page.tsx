@@ -16,7 +16,7 @@ export default function Home() {
           Drop up to 15 documents for VaultScan to analyze duplicates, PII, and more.
         </p>
 
-        <UploadDropzone<OurFileRouter>
+        <UploadDropzone<OurFileRouter, "fileUploader">
           endpoint="fileUploader"
           onClientUploadComplete={(res) => {
             setFiles(res);
