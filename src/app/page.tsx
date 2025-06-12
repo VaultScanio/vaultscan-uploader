@@ -15,19 +15,21 @@ export default function Home() {
         <p className="text-gray-600 text-sm text-center mb-6">
           Drop up to 15 documents for VaultScan to analyze duplicates, PII, and more.
         </p>
-
         <UploadDropzone<OurFileRouter, "fileUploader">
-          endpoint="fileUploader"
-          onClientUploadComplete={(res) => {
-            setFiles(res);
-            alert("✅ Upload complete!");
-          }}
-          onUploadError={(error) => {
-            alert(`❌ Upload failed: ${error.message}`);
-          }}
-          config={{ mode: "auto", maxFileCount: 15 }}
-        />
-
+  endpoint="fileUploader"
+  onClientUploadComplete={(res) => {
+    setFiles(res);
+    alert("✅ Upload complete!");
+  }}
+  onUploadError={(error) => {
+    alert(`❌ Upload failed: ${error.message}`);
+  }}
+  appearance={{
+    button: "ut-ready:bg-violet-500 ut-uploading:cursor-not-allowed rounded-full bg-black text-white px-4 py-2",
+    container: "text-black",
+  }}
+  className="w-full ut-uploading:opacity-50"
+/>
         {files.length > 0 && (
           <div className="mt-6">
             <h2 className="font-semibold mb-2">Uploaded Files:</h2>
