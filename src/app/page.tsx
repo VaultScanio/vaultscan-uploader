@@ -18,57 +18,55 @@ export default function Home() {
         </p>
 
         <UploadDropzone<OurFileRouter, "fileUploader">
-  endpoint="fileUploader"
-  onClientUploadComplete={async (res) => {
-  console.log("✅ Upload complete hook triggered");
-  if (!res || res.length === 0) return;
-  setFiles(res);
+          endpoint="fileUploader"
+          onClientUploadComplete={async (res) => {
+            console.log("✅ Upload complete hook triggered");
+            if (!res || res.length === 0) return;
+            setFiles(res);
 
-  const fileUrl = res[0].url;
-  const fileName = res[0].name;
+            const fileUrl = res[0].url;
+            const fileName = res[0].name;
 
-  console.log("📁 File URL:", fileUrl);
-  console.log("📄 File name:", fileName);
-  console.log("🧠 Fetching file text...");
+            const fileTextContent = await fetch(fileUrl).then((r) => r.text());
 
-  const fileTextContent = await fetch(fileUrl).then((r) => r.text());
+            const response = await fetch("/api/analyze", {
+              method: "POST",
+              headers: { "Content-Type": "application/json" },
+              body: JSON.stringify({ fileName, fileTextContent }),
+            });
 
-  console.log("📤 Sending to /api/analyze...");  
+            const data = await response.json();
+            setAnalysisResult(data.result || "No analysis returned.");
+          }}
+          onUploadError={(error) => {
+            alert(`❌ Upload failed: ${error.message}`);
+          }}
+          appearance={{
+            button:
+              "ut-ready:bg-violet-500 ut-uploading:cursor-not-allowed rounded-full bg-black text-white px-4 py-2",
+            container: "text-black",
+          }}
+          className="w-full ut-uploading:opacity-50"
+        />
 
-  const response = await fetch("/api/analyze", {
-    method: "POST",
-    headers: { "Content-Type": "application/json" },
-    body: JSON.stringify({ fileName, fileTextContent }),
-  });
+        {files.length > 0 && (
+          <div className="mt-6">
+            <h2 className="font-semibold mb-2">Uploaded Files:</h2>
+            <ul className="list-disc list-inside text-sm text-gray-700">
+              {files.map((file, idx) => (
+                <li key={idx}>{file.name}</li>
+              ))}
+            </ul>
+          </div>
+        )}
 
-  const data = await response.json();
-  setAnalysisResult(data.result || "No analysis returned.");
-}}
-  onUploadError={(error) => {
-    alert(`❌ Upload failed: ${error.message}`);
-  }}
-  appearance={{
-    button: "ut-ready:bg-violet-500 ut-uploading:cursor-not-allowed rounded-full bg-black text-white px-4 py-2",
-    container: "text-black",
-  }}
-  className="w-full ut-uploading:opacity-50"
-/>
-{files.length > 0 && (
-  <div className="mt-6">
-    <h2 className="font-semibold mb-2">Uploaded Files:</h2>
-    <ul className="list-disc list-inside text-sm text-gray-700">
-      {files.map((file, idx) => (
-        <li key={idx}>{file.name}</li>
-      ))}
-    </ul>
-  </div>
-)}
-
-{analysisResult && (
-  <div className="mt-6 p-4 border border-gray-300 rounded bg-white shadow">
-    <h2 className="font-semibold text-lg mb-2">AI Analysis:</h2>
-    <p>{analysisResult}</p>
-  </div>
-)}
-
-</main>
+        {analysisResult && (
+          <div className="mt-6 p-4 border border-gray-300 rounded bg-white shadow">
+            <h2 className="font-semibold text-lg mb-2">AI Analysis:</h2>
+            <p>{analysisResult}</p>
+          </div>
+        )}
+      </div>
+    </main>
+  );
+}
