@@ -1,24 +1,30 @@
-import { NextRequest, NextResponse } from "next/server";
+// src/app/api/analyze/route.ts
+import { NextResponse } from "next/server";
 import OpenAI from "openai";
 
-const openai = new OpenAI({ apiKey: process.env.OPENAI_API_KEY! });
+const openai = new OpenAI({
+  apiKey: process.env.OPENAI_API_KEY,
+});
 
-export async function POST(req: NextRequest) {
-  const body = await req.json();
-  const { fileName, fileTextContent } = body;
+export async function POST(req: Request) {
+  const { fileName, fileTextContent } = await req.json();
 
-  const prompt = `Analyze this file named "${fileName}". Give insights like duplication risk, sensitive content, or file staleness:\n\n${fileTextContent}`;
+  const prompt = `
+You are an assistant that analyzes uploaded internal documents.
 
-  try {
-    const completion = await openai.chat.completions.create({
-      model: "gpt-4",
-      messages: [{ role: "user", content: prompt }],
-    });
+Document name: ${fileName}
+---
+${fileTextContent.slice(0, 5000)} // limit for safety
+`;
 
-    const result = completion.choices[0]?.message?.content || "No response";
-    return NextResponse.json({ result });
-  } catch (error: any) {
-    console.error("OpenAI error:", error);
-    return NextResponse.json({ error: "OpenAI request failed" }, { status: 500 });
-  }
+  const completion = await openai.chat.completions.create({
+    model: "gpt-4",
+    messages: [
+      { role: "system", content: "You're a professional document analyst." },
+      { role: "user", content: prompt },
+    ],
+  });
+
+  const result = completion.choices[0].message.content;
+  return NextResponse.json({ result });
 }

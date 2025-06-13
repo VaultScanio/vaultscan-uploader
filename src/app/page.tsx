@@ -71,4 +71,5 @@ export default function Home() {
   </div>
 )}
 
-</main> //Howdy Partner
+</main>
+{/* Howdy Partner */}
