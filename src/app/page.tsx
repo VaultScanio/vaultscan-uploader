@@ -10,7 +10,7 @@ export default function Home() {
   const [analysisResult, setAnalysisResult] = useState<string | null>(null);
 
   return (
-    <main className="min-h-screen flex flex-col items-center justify-center p-6 bg-gray-100">
+    <main className="mn-h-screen flex flex-col iitems-center justify-center p-6 bg-gray-100">
       <div className="max-w-lg w-full bg-white rounded-xl shadow-md p-6">
         <h1 className="text-2xl font-bold mb-4 text-center">Upload Your Files</h1>
         <p className="text-gray-600 text-sm text-center mb-6">
