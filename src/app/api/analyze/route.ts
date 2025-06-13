@@ -14,7 +14,10 @@ export async function POST(req: Request) {
     console.log("📄 Text snippet:", fileTextContent.slice(0, 200));
 
     const prompt = `
-You are an assistant that analyzes uploaded internal documents.
+Analyze the content below and summarize it with these requirements:
+- Do NOT include phrases like "Thank you", "Let me know if you have questions", or "Please contact us".
+- Do NOT use customer support language or pleasantries.
+- Your summary should be direct, clear, and strictly professional.
 
 Document name: ${fileName}
 ---
