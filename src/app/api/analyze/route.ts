@@ -22,7 +22,7 @@ ${fileTextContent.slice(0, 5000)}
 `;
 
     const completion = await openai.chat.completions.create({
-      model: "gpt-3.5-turbo",
+      model: "gpt-4",
       messages: [
         { role: "system", content: "You're a professional document analyst." },
         { role: "user", content: prompt },
