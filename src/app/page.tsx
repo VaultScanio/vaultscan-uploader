@@ -24,7 +24,7 @@ export default function Home() {
             if (!res || res.length === 0) return;
             setFiles(res);
 
-            const fileUrl = res[0].url;
+            const fileUrl = res[0].ufsUrl;
             const fileName = res[0].name;
 
             const fileTextContent = await fetch(fileUrl).then((r) => r.text());

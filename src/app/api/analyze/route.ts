@@ -1,4 +1,3 @@
-// src/app/api/analyze/route.ts
 import { NextResponse } from "next/server";
 import OpenAI from "openai";
 
@@ -7,24 +6,32 @@ const openai = new OpenAI({
 });
 
 export async function POST(req: Request) {
-  const { fileName, fileTextContent } = await req.json();
+  try {
+    const { fileName, fileTextContent } = await req.json();
 
-  const prompt = `
+    const prompt = `
 You are an assistant that analyzes uploaded internal documents.
 
 Document name: ${fileName}
 ---
-${fileTextContent.slice(0, 5000)} // limit for safety
+${fileTextContent.slice(0, 5000)} // limit text for now
 `;
 
-  const completion = await openai.chat.completions.create({
-    model: "gpt-4",
-    messages: [
-      { role: "system", content: "You're a professional document analyst." },
-      { role: "user", content: prompt },
-    ],
-  });
+    const completion = await openai.chat.completions.create({
+      model: "gpt-4",
+      messages: [
+        { role: "system", content: "You're a professional document analyst." },
+        { role: "user", content: prompt },
+      ],
+    });
 
-  const result = completion.choices[0].message.content;
-  return NextResponse.json({ result });
+    const result = completion.choices[0]?.message?.content;
+    return NextResponse.json({ result });
+  } catch (error: any) {
+    console.error("❌ Error in /api/analyze:", error);
+    return NextResponse.json(
+      { error: "Something went wrong during analysis." },
+      { status: 500 }
+    );
+  }
 }
