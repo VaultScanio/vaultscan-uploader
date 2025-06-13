@@ -26,6 +26,11 @@ export default function Home() {
 
             const fileUrl = res[0].ufsUrl;
             const fileName = res[0].name;
+            
+            if (fileName.endsWith(".pdf")) {
+           alert("⚠️ PDF analysis isn't supported yet. Try uploading a .txt file instead.");
+           return;
+          }
 
             const fileTextContent = await fetch(fileUrl).then((r) => r.text());
 
