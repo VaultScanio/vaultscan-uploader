@@ -27,7 +27,13 @@ export default function Home() {
   const fileUrl = res[0].url;
   const fileName = res[0].name;
 
+  console.log("📁 File URL:", fileUrl);
+  console.log("📄 File name:", fileName);
+  console.log("🧠 Fetching file text...");
+
   const fileTextContent = await fetch(fileUrl).then((r) => r.text());
+
+  console.log("📤 Sending to /api/analyze...");  
 
   const response = await fetch("/api/analyze", {
     method: "POST",
